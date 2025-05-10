@@ -1,14 +1,15 @@
 
 import React, { useRef } from 'react';
-import { ResumeProvider, useResume } from '@/components/ResumeContext';
 import ResumeEditor from '@/components/ResumeEditor';
 import ResumePreview, { ResumePrintContent } from '@/components/ResumePreview';
 import TemplateSelector from '@/components/TemplateSelector';
+import { ResumeProvider, useResume } from '@/components/ResumeContext';
 import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
-const Index = () => {
+// Create a component that will be wrapped by ResumeProvider
+const ResumeBuilder = () => {
   const resumeRef = useRef<HTMLDivElement>(null);
   const { resumeData } = useResume();
 
@@ -65,43 +66,50 @@ const Index = () => {
   };
 
   return (
-    <ResumeProvider>
-      <div className="min-h-screen flex flex-col bg-background">
-        <header className="border-b bg-white py-4 px-6 sticky top-0 z-10">
-          <div className="container mx-auto">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-bold text-primary">Professional Resume Builder</h1>
-                <p className="text-sm text-muted-foreground">Create a standout resume in minutes</p>
-              </div>
-            </div>
-          </div>
-        </header>
-
+    <div className="min-h-screen flex flex-col bg-background">
+      <header className="border-b bg-white py-4 px-6 sticky top-0 z-10">
         <div className="container mx-auto">
-          <TemplateSelector />
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-primary">Professional Resume Builder</h1>
+              <p className="text-sm text-muted-foreground">Create a standout resume in minutes</p>
+            </div>
+          </div>
         </div>
+      </header>
 
-        <main className="flex-1 container mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 pb-8">
-            <div className="h-[800px] lg:min-h-[800px]">
-              <ResumeEditor />
-            </div>
-            <div className="h-[800px] lg:min-h-[800px]">
-              <ResumePreview onDownload={handleDownload} />
-              <div style={{ display: 'none' }}>
-                <ResumePrintContent ref={resumeRef} data={resumeData} />
-              </div>
-            </div>
-          </div>
-        </main>
-
-        <footer className="border-t py-6 bg-white">
-          <div className="container mx-auto text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Professional Resume Builder. All rights reserved.
-          </div>
-        </footer>
+      <div className="container mx-auto">
+        <TemplateSelector />
       </div>
+
+      <main className="flex-1 container mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 pb-8">
+          <div className="h-[800px] lg:min-h-[800px]">
+            <ResumeEditor />
+          </div>
+          <div className="h-[800px] lg:min-h-[800px]">
+            <ResumePreview onDownload={handleDownload} />
+            <div style={{ display: 'none' }}>
+              <ResumePrintContent ref={resumeRef} data={resumeData} />
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer className="border-t py-6 bg-white">
+        <div className="container mx-auto text-center text-sm text-muted-foreground">
+          &copy; {new Date().getFullYear()} Professional Resume Builder. All rights reserved.
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+// Wrapper component that provides the ResumeProvider
+const Index = () => {
+  return (
+    <ResumeProvider>
+      <ResumeBuilder />
     </ResumeProvider>
   );
 };
