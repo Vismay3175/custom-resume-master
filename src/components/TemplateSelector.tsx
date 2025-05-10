@@ -33,13 +33,25 @@ const TemplateSelector: React.FC = () => {
       description: 'Traditional design for senior-level positions',
       color: 'bg-resume-accent-teal'
     },
+    {
+      id: 'modern',
+      name: 'Modern',
+      description: 'Contemporary design with clean aesthetics',
+      color: 'bg-blue-600'
+    },
+    {
+      id: 'classic',
+      name: 'Classic',
+      description: 'Timeless layout with traditional formatting',
+      color: 'bg-indigo-800'
+    },
   ];
 
   return (
     <div className="py-4">
       <h3 className="text-lg font-medium mb-4">Choose a Template</h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
         {templates.map((template) => (
           <div
             key={template.id}
