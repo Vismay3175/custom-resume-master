@@ -82,6 +82,48 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ data }) => {
               ))}
             </div>
           </div>
+
+          {/* Projects */}
+          {data.projects.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-xl font-bold text-blue-600 mb-4 pb-2 border-b-2 border-blue-200">PROJECTS</h2>
+              
+              <div className="space-y-8">
+                {data.projects.map(project => (
+                  <div key={project.id} className="relative">
+                    <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-2">
+                      <h3 className="font-bold text-lg">{project.name}</h3>
+                      <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full md:ml-2">
+                        {project.startDate} - {project.endDate}
+                      </span>
+                    </div>
+                    <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-3">
+                      <h4 className="font-semibold text-blue-700">{project.company}</h4>
+                      {project.link && (
+                        <a href={project.link} className="text-sm text-blue-600 underline">
+                          View Project
+                        </a>
+                      )}
+                    </div>
+                    <ul className="list-disc list-outside space-y-2 ml-5 text-gray-700">
+                      {project.description.map((desc, index) => (
+                        <li key={index}>{desc}</li>
+                      ))}
+                    </ul>
+                    {project.technologies && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {project.technologies.split(',').map((tech, i) => (
+                          <span key={i} className="text-xs bg-blue-50 border border-blue-100 rounded-full px-2 py-1">
+                            {tech.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           
           {/* Education */}
           <div>

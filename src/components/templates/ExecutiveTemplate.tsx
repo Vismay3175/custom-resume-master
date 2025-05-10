@@ -54,6 +54,42 @@ const ExecutiveTemplate: React.FC<ExecutiveTemplateProps> = ({ data }) => {
         </div>
       </div>
       
+      {/* Projects */}
+      {data.projects.length > 0 && (
+        <div className="px-8 py-6">
+          <h2 className="text-lg font-semibold text-resume-accent-teal mb-4 uppercase tracking-wider">Key Projects</h2>
+          
+          <div className="space-y-6">
+            {data.projects.map(project => (
+              <div key={project.id} className="border-l-2 border-resume-accent-teal pl-4 py-1">
+                <div className="flex justify-between items-baseline mb-2">
+                  <h3 className="font-bold uppercase">{project.name}</h3>
+                  <span className="text-sm font-medium">{project.startDate} - {project.endDate}</span>
+                </div>
+                <div className="flex justify-between items-baseline mb-3">
+                  <h4 className="italic font-medium">{project.company}</h4>
+                  {project.link && (
+                    <a href={project.link} className="text-sm underline text-resume-accent-teal">
+                      View Project
+                    </a>
+                  )}
+                </div>
+                <ul className="list-disc list-outside text-sm space-y-2 ml-5">
+                  {project.description.map((desc, index) => (
+                    <li key={index} className="leading-relaxed">{desc}</li>
+                  ))}
+                </ul>
+                {project.technologies && (
+                  <p className="text-sm mt-2 font-medium">
+                    Technologies: <span className="font-normal">{project.technologies}</span>
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
       <div className="flex">
         {/* Education Column */}
         <div className="px-8 py-6 flex-1">

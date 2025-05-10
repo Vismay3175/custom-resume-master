@@ -87,6 +87,44 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data }) => {
             </div>
           </div>
           
+          {/* Projects */}
+          {data.projects.length > 0 && (
+            <div>
+              <h2 className="text-xl font-bold text-indigo-800 mb-4 uppercase text-center">Projects</h2>
+              
+              <div className="space-y-6">
+                {data.projects.map(project => (
+                  <div key={project.id}>
+                    <div className="mb-2">
+                      <div className="flex flex-col sm:flex-row justify-between items-baseline">
+                        <h3 className="font-bold">{project.name}</h3>
+                        <span className="text-sm italic">{project.startDate} - {project.endDate}</span>
+                      </div>
+                      <div className="flex flex-col sm:flex-row justify-between items-baseline">
+                        <h4 className="font-medium text-indigo-800">{project.company}</h4>
+                        {project.link && (
+                          <a href={project.link} className="text-sm text-indigo-600 underline">
+                            View Project
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <ul className="list-disc list-outside space-y-1 ml-5 text-gray-700">
+                      {project.description.map((desc, index) => (
+                        <li key={index}>{desc}</li>
+                      ))}
+                    </ul>
+                    {project.technologies && (
+                      <p className="text-sm mt-1 text-gray-600 italic">
+                        Technologies: {project.technologies}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
           {/* Education */}
           <div>
             <h2 className="text-xl font-bold text-indigo-800 mb-4 uppercase text-center">Education</h2>

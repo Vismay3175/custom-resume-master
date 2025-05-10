@@ -55,6 +55,46 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data }) => {
         </div>
       </div>
       
+      {/* Projects */}
+      {data.projects.length > 0 && (
+        <>
+          <div className="h-px bg-gray-200 my-6"></div>
+          
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-center uppercase tracking-wide mb-4">Projects</h2>
+            
+            <div className="space-y-6">
+              {data.projects.map(project => (
+                <div key={project.id}>
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-baseline mb-2">
+                    <h3 className="font-bold">{project.name}</h3>
+                    <span className="text-sm text-resume-text-medium">{project.startDate} - {project.endDate}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-baseline mb-2">
+                    <h4 className="font-medium">{project.company}</h4>
+                    {project.link && (
+                      <a href={project.link} className="text-sm text-resume-text-medium underline">
+                        Project Link
+                      </a>
+                    )}
+                  </div>
+                  <ul className="list-disc list-outside text-sm space-y-1 ml-5 text-resume-text-medium">
+                    {project.description.map((desc, index) => (
+                      <li key={index}>{desc}</li>
+                    ))}
+                  </ul>
+                  {project.technologies && (
+                    <p className="text-sm mt-1 text-resume-text-medium italic">
+                      Technologies: {project.technologies}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+      
       <div className="h-px bg-gray-200 my-6"></div>
       
       {/* Education */}

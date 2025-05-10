@@ -54,6 +54,42 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
         </div>
       </div>
       
+      {/* Projects */}
+      {data.projects.length > 0 && (
+        <div className="px-8 pb-6">
+          <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-4">PROJECTS</h2>
+          
+          <div className="space-y-6">
+            {data.projects.map(project => (
+              <div key={project.id}>
+                <div className="flex justify-between items-baseline">
+                  <h3 className="font-bold">{project.name}</h3>
+                  <span className="text-sm">{project.startDate} - {project.endDate}</span>
+                </div>
+                <div className="flex justify-between items-baseline mb-2">
+                  <h4 className="text-resume-blue font-medium">{project.company}</h4>
+                  {project.link && (
+                    <a href={project.link} className="text-sm text-resume-blue underline">
+                      Project Link
+                    </a>
+                  )}
+                </div>
+                <ul className="list-disc list-outside text-sm space-y-1 ml-5">
+                  {project.description.map((desc, index) => (
+                    <li key={index}>{desc}</li>
+                  ))}
+                </ul>
+                {project.technologies && (
+                  <div className="mt-2 text-sm text-resume-text-medium">
+                    <strong>Technologies:</strong> {project.technologies}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
       {/* Education */}
       <div className="px-8 pb-6">
         <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-4">EDUCATION</h2>

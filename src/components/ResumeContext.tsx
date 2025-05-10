@@ -34,6 +34,17 @@ export type ExperienceItem = {
   description: string[];
 };
 
+export type ProjectItem = {
+  id: string;
+  name: string;
+  company: string;
+  startDate: string;
+  endDate: string;
+  description: string[];
+  technologies?: string;
+  link?: string;
+};
+
 export type SkillItem = {
   id: string;
   name: string;
@@ -50,6 +61,7 @@ export type ResumeData = {
   personalInfo: PersonalInfo;
   education: EducationItem[];
   experience: ExperienceItem[];
+  projects: ProjectItem[];
   skillCategories: SkillCategory[];
   template: string;
 };
@@ -63,6 +75,9 @@ interface ResumeContextType {
   addExperience: (item: Omit<ExperienceItem, 'id'>) => void;
   updateExperience: (id: string, item: Partial<ExperienceItem>) => void;
   removeExperience: (id: string) => void;
+  addProject: (item: Omit<ProjectItem, 'id'>) => void;
+  updateProject: (id: string, item: Partial<ProjectItem>) => void;
+  removeProject: (id: string) => void;
   addSkillCategory: (name: string) => void;
   updateSkillCategory: (id: string, name: string) => void;
   removeSkillCategory: (id: string) => void;
@@ -126,6 +141,36 @@ const defaultResumeData: ResumeData = {
         'Built and maintained the company\'s component library, improving development efficiency by 30%'
       ],
     },
+  ],
+  projects: [
+    {
+      id: '1',
+      name: 'E-commerce Platform Redesign',
+      company: 'Tech Innovations Inc.',
+      startDate: 'Apr 2022',
+      endDate: 'Aug 2022',
+      description: [
+        'Redesigned the user interface of a major e-commerce platform serving 2M+ customers',
+        'Implemented responsive design principles, improving mobile conversion rates by 25%',
+        'Integrated with payment gateways and shipping APIs for a seamless checkout experience'
+      ],
+      technologies: 'React, TypeScript, Stripe API, Redux, Styled Components',
+      link: 'https://project-demo.example.com'
+    },
+    {
+      id: '2',
+      name: 'Portfolio Website',
+      company: 'Self-directed',
+      startDate: 'Jan 2021',
+      endDate: 'Feb 2021',
+      description: [
+        'Designed and developed a personal portfolio website to showcase projects',
+        'Implemented animations and transitions for an engaging user experience',
+        'Optimized for performance with a 98 Lighthouse performance score'
+      ],
+      technologies: 'Next.js, Tailwind CSS, Framer Motion',
+      link: 'https://alexjohnson.dev'
+    }
   ],
   skillCategories: [
     {
@@ -219,6 +264,31 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }));
   };
 
+  // Projects
+  const addProject = (item: Omit<ProjectItem, 'id'>) => {
+    const newItem = { ...item, id: generateId() };
+    setResumeData((prev) => ({
+      ...prev,
+      projects: [...prev.projects, newItem],
+    }));
+  };
+
+  const updateProject = (id: string, item: Partial<ProjectItem>) => {
+    setResumeData((prev) => ({
+      ...prev,
+      projects: prev.projects.map((proj) => 
+        proj.id === id ? { ...proj, ...item } : proj
+      ),
+    }));
+  };
+
+  const removeProject = (id: string) => {
+    setResumeData((prev) => ({
+      ...prev,
+      projects: prev.projects.filter((proj) => proj.id !== id),
+    }));
+  };
+
   // Skills
   const addSkillCategory = (name: string) => {
     const newCategory = {
@@ -308,6 +378,9 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     addExperience,
     updateExperience,
     removeExperience,
+    addProject,
+    updateProject,
+    removeProject,
     addSkillCategory,
     updateSkillCategory,
     removeSkillCategory,

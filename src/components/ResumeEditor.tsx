@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -7,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { Plus, Trash2, FileText } from 'lucide-react';
+import { Plus, Trash2, FileText, Briefcase, Building, Link } from 'lucide-react';
 import { useResume } from './ResumeContext';
 
 const ResumeEditor: React.FC = () => {
@@ -20,6 +19,9 @@ const ResumeEditor: React.FC = () => {
     addExperience,
     updateExperience,
     removeExperience,
+    addProject,
+    updateProject,
+    removeProject,
     addSkillCategory,
     updateSkillCategory,
     removeSkillCategory,
@@ -38,6 +40,18 @@ const ResumeEditor: React.FC = () => {
       description: ['Describe your responsibilities and achievements'],
     });
     toast.success('New experience added!');
+  };
+
+  const handleAddProject = () => {
+    addProject({
+      name: 'New Project',
+      company: 'Company or Self-directed',
+      startDate: 'Start Date',
+      endDate: 'End Date',
+      description: ['Describe your project'],
+      technologies: 'Technologies used',
+    });
+    toast.success('New project added!');
   };
 
   const handleAddEducation = () => {
@@ -75,11 +89,32 @@ const ResumeEditor: React.FC = () => {
     }
   };
 
+  const handleProjectDescriptionChange = (
+    projId: string,
+    index: number,
+    value: string
+  ) => {
+    const project = resumeData.projects.find((proj) => proj.id === projId);
+    if (project) {
+      const newDescription = [...project.description];
+      newDescription[index] = value;
+      updateProject(projId, { description: newDescription });
+    }
+  };
+
   const handleAddExperiencePoint = (expId: string) => {
     const experience = resumeData.experience.find((exp) => exp.id === expId);
     if (experience) {
       const newDescription = [...experience.description, 'New bullet point'];
       updateExperience(expId, { description: newDescription });
+    }
+  };
+
+  const handleAddProjectPoint = (projId: string) => {
+    const project = resumeData.projects.find((proj) => proj.id === projId);
+    if (project) {
+      const newDescription = [...project.description, 'New bullet point'];
+      updateProject(projId, { description: newDescription });
     }
   };
 
@@ -91,12 +126,21 @@ const ResumeEditor: React.FC = () => {
     }
   };
 
+  const handleRemoveProjectPoint = (projId: string, index: number) => {
+    const project = resumeData.projects.find((proj) => proj.id === projId);
+    if (project) {
+      const newDescription = project.description.filter((_, i) => i !== index);
+      updateProject(projId, { description: newDescription });
+    }
+  };
+
   return (
     <div className="h-full overflow-auto pb-10">
       <Tabs defaultValue="personal" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="personal">Personal</TabsTrigger>
           <TabsTrigger value="experience">Experience</TabsTrigger>
+          <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="education">Education</TabsTrigger>
           <TabsTrigger value="skills">Skills</TabsTrigger>
         </TabsList>
@@ -330,6 +374,156 @@ const ResumeEditor: React.FC = () => {
                           )}
                         </div>
                       ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Projects Tab */}
+        <TabsContent value="projects">
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <h3 className="text-lg font-medium">Projects</h3>
+              <Button onClick={handleAddProject} variant="outline" size="sm">
+                <Plus className="mr-2 h-4 w-4" /> Add Project
+              </Button>
+            </div>
+
+            {resumeData.projects.map((proj) => (
+              <Card key={proj.id} className="section-card">
+                <CardContent className="pt-4">
+                  <div className="flex justify-between pb-2">
+                    <h4 className="font-medium">{proj.name}</h4>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        removeProject(proj.id);
+                        toast.success('Project removed!');
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Project Name</label>
+                      <Input
+                        value={proj.name}
+                        onChange={(e) => 
+                          updateProject(proj.id, { name: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        <span className="flex items-center">
+                          <Building className="h-4 w-4 mr-1" />
+                          Company/Organization
+                        </span>
+                      </label>
+                      <Input
+                        value={proj.company}
+                        onChange={(e) => 
+                          updateProject(proj.id, { company: e.target.value })
+                        }
+                        placeholder="Company name or 'Self-directed'"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Start Date</label>
+                      <Input
+                        value={proj.startDate}
+                        onChange={(e) => 
+                          updateProject(proj.id, { startDate: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">End Date</label>
+                      <Input
+                        value={proj.endDate}
+                        onChange={(e) => 
+                          updateProject(proj.id, { endDate: e.target.value })
+                        }
+                        placeholder="End Date or 'Present'"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">Description</label>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleAddProjectPoint(proj.id)}
+                      >
+                        <Plus className="mr-2 h-3 w-3" /> Add Point
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {proj.description.map((desc, i) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <div className="flex-1">
+                            <Input
+                              value={desc}
+                              onChange={(e) => 
+                                handleProjectDescriptionChange(
+                                  proj.id, 
+                                  i, 
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Describe your project"
+                            />
+                          </div>
+                          {proj.description.length > 1 && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleRemoveProjectPoint(proj.id, i)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Technologies Used</label>
+                      <Input
+                        value={proj.technologies || ''}
+                        onChange={(e) => 
+                          updateProject(proj.id, { technologies: e.target.value })
+                        }
+                        placeholder="React, TypeScript, Node.js, etc."
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        <span className="flex items-center">
+                          <Link className="h-4 w-4 mr-1" />
+                          Project Link (Optional)
+                        </span>
+                      </label>
+                      <Input
+                        value={proj.link || ''}
+                        onChange={(e) => 
+                          updateProject(proj.id, { link: e.target.value })
+                        }
+                        placeholder="https://project-demo.example.com"
+                      />
                     </div>
                   </div>
                 </CardContent>
