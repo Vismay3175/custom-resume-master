@@ -1,16 +1,47 @@
 
 import React from 'react';
 import { ResumeData } from '../ResumeContext';
+import { motion } from 'framer-motion';
 
 interface ProfessionalTemplateProps {
   data: ResumeData;
 }
 
 const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => {
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.4
+      }
+    }
+  };
+
   return (
-    <div className="w-full h-full bg-white text-resume-text-dark font-sans">
+    <motion.div 
+      className="w-full h-full bg-white text-resume-text-dark font-sans"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header */}
-      <div className="bg-resume-navy text-white p-8">
+      <motion.div 
+        className="bg-resume-navy text-white p-8"
+        variants={itemVariants}
+      >
         <h1 className="text-3xl font-bold">{data.personalInfo.name}</h1>
         <p className="text-xl mt-1">{data.personalInfo.title}</p>
         
@@ -21,21 +52,32 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
           {data.personalInfo.linkedin && <div>{data.personalInfo.linkedin}</div>}
           {data.personalInfo.website && <div>{data.personalInfo.website}</div>}
         </div>
-      </div>
+      </motion.div>
       
       {/* Summary */}
-      <div className="p-8">
-        <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-3">PROFESSIONAL SUMMARY</h2>
+      <motion.div 
+        className="p-8"
+        variants={itemVariants}
+      >
+        <h2 className="text-lg font-bold border-b border-resume-navy pb-1 mb-3">PROFESSIONAL SUMMARY</h2>
         <p className="text-sm">{data.personalInfo.summary}</p>
-      </div>
+      </motion.div>
       
       {/* Experience */}
-      <div className="px-8 pb-6">
-        <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-4">EXPERIENCE</h2>
+      <motion.div 
+        className="px-8 pb-6"
+        variants={itemVariants}
+      >
+        <h2 className="text-lg font-bold border-b border-resume-navy pb-1 mb-4">EXPERIENCE</h2>
         
         <div className="space-y-6">
-          {data.experience.map(exp => (
-            <div key={exp.id}>
+          {data.experience.map((exp, index) => (
+            <motion.div 
+              key={exp.id} 
+              variants={itemVariants}
+              custom={index}
+              className="transition-all duration-300 hover:shadow-md hover:bg-gray-50 p-2 rounded"
+            >
               <div className="flex justify-between items-baseline">
                 <h3 className="font-bold">{exp.position}</h3>
                 <span className="text-sm">{exp.startDate} - {exp.endDate}</span>
@@ -49,19 +91,27 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
                   <li key={index}>{desc}</li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
       
       {/* Projects */}
       {data.projects.length > 0 && (
-        <div className="px-8 pb-6">
-          <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-4">PROJECTS</h2>
+        <motion.div 
+          className="px-8 pb-6"
+          variants={itemVariants}
+        >
+          <h2 className="text-lg font-bold border-b border-resume-navy pb-1 mb-4">PROJECTS</h2>
           
           <div className="space-y-6">
-            {data.projects.map(project => (
-              <div key={project.id}>
+            {data.projects.map((project, index) => (
+              <motion.div 
+                key={project.id} 
+                variants={itemVariants}
+                custom={index}
+                className="transition-all duration-300 hover:shadow-md hover:bg-gray-50 p-2 rounded"
+              >
                 <div className="flex justify-between items-baseline">
                   <h3 className="font-bold">{project.name}</h3>
                   <span className="text-sm">{project.startDate} - {project.endDate}</span>
@@ -69,7 +119,7 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
                 <div className="flex justify-between items-baseline mb-2">
                   <h4 className="text-resume-blue font-medium">{project.company}</h4>
                   {project.link && (
-                    <a href={project.link} className="text-sm text-resume-blue underline">
+                    <a href={project.link} className="text-sm text-resume-blue underline hover:text-resume-navy transition-colors">
                       Project Link
                     </a>
                   )}
@@ -84,19 +134,27 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
                     <strong>Technologies:</strong> {project.technologies}
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
       
       {/* Education */}
-      <div className="px-8 pb-6">
-        <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-4">EDUCATION</h2>
+      <motion.div 
+        className="px-8 pb-6"
+        variants={itemVariants}
+      >
+        <h2 className="text-lg font-bold border-b border-resume-navy pb-1 mb-4">EDUCATION</h2>
         
         <div className="space-y-4">
-          {data.education.map(edu => (
-            <div key={edu.id}>
+          {data.education.map((edu, index) => (
+            <motion.div 
+              key={edu.id} 
+              variants={itemVariants}
+              custom={index}
+              className="transition-all duration-300 hover:shadow-md hover:bg-gray-50 p-2 rounded"
+            >
               <div className="flex justify-between items-baseline">
                 <h3 className="font-bold">{edu.degree} in {edu.fieldOfStudy}</h3>
                 <span className="text-sm">{edu.startDate} - {edu.endDate}</span>
@@ -108,24 +166,35 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
               {edu.description && (
                 <p className="text-sm mt-1">{edu.description}</p>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
       
       {/* Skills */}
-      <div className="px-8 pb-8">
-        <h2 className="text-lg font-semibold border-b border-resume-navy pb-1 mb-4">SKILLS</h2>
+      <motion.div 
+        className="px-8 pb-8"
+        variants={itemVariants}
+      >
+        <h2 className="text-lg font-bold border-b border-resume-navy pb-1 mb-4">SKILLS</h2>
         
         <div className="space-y-4">
-          {data.skillCategories.map(category => (
-            <div key={category.id}>
+          {data.skillCategories.map((category, catIndex) => (
+            <motion.div 
+              key={category.id}
+              variants={itemVariants}
+              custom={catIndex}
+            >
               <h3 className="font-medium mb-2">{category.name}</h3>
               <div className="flex flex-wrap gap-2">
-                {category.skills.map(skill => (
-                  <div 
+                {category.skills.map((skill, skillIndex) => (
+                  <motion.div 
                     key={skill.id}
-                    className="bg-resume-bg-light rounded-lg px-3 py-1 text-sm border border-resume-light-blue/30"
+                    className="bg-resume-bg-light rounded-lg px-3 py-1 text-sm border border-resume-light-blue/30
+                              transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-resume-light-blue/20"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: (catIndex * 0.1) + (skillIndex * 0.05) }}
                   >
                     {skill.name}
                     {skill.level && (
@@ -138,14 +207,14 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ data }) => 
                         ))}
                       </span>
                     )}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
